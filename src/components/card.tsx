@@ -8,11 +8,12 @@ type OfferCardProps = {
   className: string;
   offerCard: OfferCardType;
   onHover?: (id: string | null) => void;
+  onMouseLeave?: () => void;
 };
 
 const FAVORITES_CLASS_NAME = 'favorites';
 
-function Card({offerCard, className, onHover}:OfferCardProps):JSX.Element {
+function Card({offerCard, className, onHover, onMouseLeave}:OfferCardProps):JSX.Element {
   const imgWidth = className === FAVORITES_CLASS_NAME ? 150 : 260;
   const imgHeight = className === FAVORITES_CLASS_NAME ? 110 : 200;
   const cardInfoClassName = className === FAVORITES_CLASS_NAME ? 'favorites_card-info ' : '';
@@ -22,7 +23,7 @@ function Card({offerCard, className, onHover}:OfferCardProps):JSX.Element {
   return (
     <article className={`${className}__card place-card`}
       onMouseEnter={() => onHover?.(id)}
-      onMouseLeave={() => onHover?.(null)}
+      onMouseLeave={() => onMouseLeave?.()}
     >
       <div className="place-card__mark">
         <span>Premium</span>

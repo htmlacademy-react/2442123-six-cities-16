@@ -1,18 +1,24 @@
+import { useState } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import { getMockNearOfferCardsById, getMockOfferById } from '../../mocks/offers';
 import { AppRoute } from '../../const';
 import { Helmet } from 'react-helmet-async';
-import Card from '../../components/card';
 import OfferContainer from '../../components/offer-container/offer-container';
+import Map from '../../components/map/map';
+import NearbyOffersList from '../../components/nearby-offers-list/nearby-offers-list';
 
 function OfferPage (): JSX.Element {
-  const {id: offerId} = useParams();
+  const { id: offerId } = useParams();
   const nearOfferCards = getMockNearOfferCardsById(offerId);
   const currentOffer = getMockOfferById(offerId);
+
+  const [hoveredOfferId, setHoveredOfferId] = useState<string | null>(null);
 
   if (!currentOffer) {
     return <Navigate to={AppRoute.NotFound} replace />;
   }
+
+  const city = currentOffer.city;
 
   return (
     <main className="page__main page__main--offer">
@@ -30,15 +36,17 @@ function OfferPage (): JSX.Element {
           </div>
         </div>
         <OfferContainer offer={currentOffer} />
-        <section className="offer__map map"></section>
+        <section className="offer__map map">
+          <Map city={city} offers={nearOfferCards} activeOffer={nearOfferCards.find((offer) => offer.id === hoveredOfferId) || null} />
+        </section>
       </section>
-      <div className=" container">
+      <div className="container">
         <section className="near-places places">
           <h2 className="near-places_title">Other places in the neighbourhood</h2>
-          <div className="near-places__list places__list">
-            {nearOfferCards.map ((offerCard) => <Card key={offerCard.id} className="near-places" offerCard={offerCard} />)}
-          </div>
-
+          <NearbyOffersList
+            offers={nearOfferCards}
+            onHover={setHoveredOfferId} // Передаем функцию для обновления состояния
+          />
         </section>
       </div>
     </main>

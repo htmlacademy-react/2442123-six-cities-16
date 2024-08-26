@@ -3,7 +3,7 @@ import { generateOffer } from './generate';
 
 type StoredOffersType = {mockOffers: OfferType[]; mockOfferCards: OfferCardType[]}
 
-const MOCK_OFFERS_COUNT = 27;
+const MOCK_OFFERS_COUNT = 6;
 const FILMS_STORAGE_KEY = 'six-cities-15-films';
 
 const generatedOfferCards: OfferCardType[] = [];

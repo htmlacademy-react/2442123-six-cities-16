@@ -7,19 +7,23 @@ import { getMarkupRating, upFirstLetter } from '../utils';
 type OfferCardProps = {
   className: string;
   offerCard: OfferCardType;
+  onHover: (id: string | null) => void;
 };
 
 const FAVORITES_CLASS_NAME = 'favorites';
 
-function Card({offerCard, className}:OfferCardProps):JSX.Element {
+function Card({offerCard, className, onHover}:OfferCardProps):JSX.Element {
   const imgWidth = className === FAVORITES_CLASS_NAME ? 150 : 260;
   const imgHeight = className === FAVORITES_CLASS_NAME ? 110 : 200;
   const cardInfoClassName = className === FAVORITES_CLASS_NAME ? 'favorites_card-info ' : '';
 
-  const {previewImage, price, isFavorite, rating, title, type} = offerCard;
+  const {previewImage, price, isFavorite, rating, title, type, id} = offerCard;
 
   return (
-    <article className={`${className}__card place-card`}>
+    <article className={`${className}__card place-card`}
+      onMouseEnter={() => onHover(id)}
+      onMouseLeave={() => onHover(null)}
+    >
       <div className="place-card__mark">
         <span>Premium</span>
       </div>
@@ -34,12 +38,6 @@ function Card({offerCard, className}:OfferCardProps):JSX.Element {
             <b className="place-card__price-value">&euro;{price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
-          {/* <button className="place-card__bookmark-button button" type="button">
-            <svg className="place-card__bookmark-icon" width="18" height="19">
-              <use xlinkHref="#icon-bookmark"></use>
-            </svg>
-            <span className="visually-hidden">To bookmarks</span>
-          </button> */}
           <FavoriteButton className="place-card" isFavorite={isFavorite} />
         </div>
         <div className="place-card__rating rating">

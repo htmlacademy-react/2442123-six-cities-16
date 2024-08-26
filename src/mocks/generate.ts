@@ -5,7 +5,7 @@ import { generateRandomBoolean, generateRandomFloat, generateRandomInteger, getR
 const IS_STATIC_LOCATION = true;
 
 export const generateOffer = (index:number) => {
-  const offerCityName = getRandomItem(templateCities);
+  const offerCityName = templateCities[1];
   const offerTemplate = {
     id: `id_${index}`,
     title: getRandomItem(templateTitles),

@@ -7,7 +7,7 @@ import { getMarkupRating, upFirstLetter } from '../utils';
 type OfferCardProps = {
   className: string;
   offerCard: OfferCardType;
-  onHover: (id: string | null) => void;
+  onHover?: (id: string | null) => void;
 };
 
 const FAVORITES_CLASS_NAME = 'favorites';
@@ -21,8 +21,8 @@ function Card({offerCard, className, onHover}:OfferCardProps):JSX.Element {
 
   return (
     <article className={`${className}__card place-card`}
-      onMouseEnter={() => onHover(id)}
-      onMouseLeave={() => onHover(null)}
+      onMouseEnter={() => onHover?.(id)}
+      onMouseLeave={() => onHover?.(null)}
     >
       <div className="place-card__mark">
         <span>Premium</span>

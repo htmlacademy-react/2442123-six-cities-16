@@ -35,3 +35,12 @@ export type OfferType = OfferTemplateType & {
   images: string[];
   maxAdults: number;
 }
+
+export type OffersState = {
+  city: string;
+  offers: OfferCardType[];
+};
+
+export type Action =
+  | { type: 'SET_CITY'; payload: string }
+  | { type: 'SET_OFFERS'; payload: OfferCardType[] };

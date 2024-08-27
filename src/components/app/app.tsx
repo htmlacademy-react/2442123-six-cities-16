@@ -6,17 +6,12 @@ import OfferPage from '../../pages/offer-page/offer-page';
 import { AppRoute } from '../../const';
 import PrivateRoute from '../private-route/private-route';
 import NotFound from '../../pages/not-found/not-found';
-import { OfferCardType } from '../../types/offer-type';
 import { getMockFavoriteOfferCards } from '../../mocks/offers';
 import Layout from '../layout/layout';
 import { getAuthorizationStatus } from '../../mocks/auth-status';
 import { HelmetProvider } from 'react-helmet-async';
 
-type AppScreanProps = {
-  offerCards: OfferCardType[];
-}
-
-function App({offerCards}: AppScreanProps): JSX.Element {
+export default function App(): JSX.Element {
   const favoriteOfferCards = getMockFavoriteOfferCards();
   const authorizationStatus = getAuthorizationStatus();
 
@@ -30,7 +25,7 @@ function App({offerCards}: AppScreanProps): JSX.Element {
           >
             <Route
               index
-              element={<MainPage offerCards={offerCards} />}
+              element={<MainPage />}
             />
             <Route
               path={AppRoute.Login}
@@ -63,4 +58,3 @@ function App({offerCards}: AppScreanProps): JSX.Element {
   );
 }
 
-export default App;

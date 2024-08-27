@@ -1,5 +1,6 @@
 import { OfferCardType, OfferType } from '../types/offer-type';
 import { generateOffer } from './generate';
+import { templateCities } from './templates';
 
 type StoredOffersType = {mockOffers: OfferType[]; mockOfferCards: OfferCardType[]}
 
@@ -9,11 +10,13 @@ const FILMS_STORAGE_KEY = 'six-cities-15-films';
 const generatedOfferCards: OfferCardType[] = [];
 const generatedOffers: OfferType[] = [];
 
-for (let i = 0; i < MOCK_OFFERS_COUNT; i++) {
-  const {offer, offerCard} = generateOffer(i);
-  generatedOfferCards.push(offerCard);
-  generatedOffers.push(offer);
-}
+templateCities.forEach((city, cityIndex) => {
+  for (let i = 0; i < MOCK_OFFERS_COUNT; i++) {
+    const {offer, offerCard} = generateOffer(i + cityIndex * MOCK_OFFERS_COUNT, city);
+    generatedOfferCards.push(offerCard);
+    generatedOffers.push(offer);
+  }
+});
 
 const getReadyOffers = () => {
   const storedOffersMap = localStorage.getItem (FILMS_STORAGE_KEY) ;

@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'react';
-import { Icon, Marker, layerGroup } from 'leaflet';
+import { Icon, Marker, layerGroup, LatLngBounds, LatLngTuple } from 'leaflet';
 import useMap from '../../hooks/use-map';
 import { OfferCardType, City } from '../../types/offer-type';
 import 'leaflet/dist/leaflet.css';
@@ -30,12 +30,13 @@ function Map({ city, offers, activeOffer }: MapProps): JSX.Element {
   useEffect(() => {
     if (map) {
       const markerLayer = layerGroup().addTo(map);
+      // Создаем bounds с помощью массива координат города
+      const cityCoords: LatLngTuple = [city.location.latitude, city.location.longitude];
+      const bounds = new LatLngBounds(cityCoords, cityCoords);
 
       offers.forEach((offer) => {
-        const marker = new Marker({
-          lat: offer.location.latitude,
-          lng: offer.location.longitude,
-        });
+        const offerCoords: LatLngTuple = [offer.location.latitude, offer.location.longitude];
+        const marker = new Marker(offerCoords);
 
         marker
           .setIcon(
@@ -44,13 +45,17 @@ function Map({ city, offers, activeOffer }: MapProps): JSX.Element {
               : defaultCustomIcon
           )
           .addTo(markerLayer);
+
+        bounds.extend(offerCoords);
       });
+
+      map.fitBounds(bounds, { padding: [50, 50] });
 
       return () => {
         map.removeLayer(markerLayer);
       };
     }
-  }, [map, offers, activeOffer]);
+  }, [map, city, offers, activeOffer]);
 
   return <div style={{ height: '100%' }} ref={mapRef}></div>;
 }

@@ -1,22 +1,21 @@
-import { Helmet } from 'react-helmet-async';
+import { useSelector } from 'react-redux';
+import { selectCity, selectOffers } from '../../store/selectors';
 import Card from '../../components/card';
-import { OfferCardType } from '../../types/offer-type';
-import { AppRoute } from '../../const';
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
 import Map from '../../components/map/map';
-
-type MainProps = {
-  offerCards: OfferCardType[];
-};
+import CitiesList from '../../components/cities-list/cities-list';
+import { Helmet } from 'react-helmet-async';
+import { useState } from 'react';
+import { OfferCardType } from '../../types/offer-type';
 
 const CITIES = ['Paris', 'Amsterdam', 'Berlin', 'Rome', 'Madrid', 'Barcelona'];
 
-function MainPage({ offerCards }: MainProps): JSX.Element {
-  const [selectedOffer, setSelectedOffer] = useState<OfferCardType | null>(null);
-  const [activeCity, setActiveCity] = useState<string>('Amsterdam');
+function MainPage(): JSX.Element {
+  const activeCity = useSelector(selectCity);
+  const offers = useSelector(selectOffers);
 
-  const filteredOffers = offerCards.filter((offer) => offer.city.name === activeCity);
+  const filteredOffers = offers.filter((offer) => offer.city.name === activeCity);
+
+  const [selectedOffer, setSelectedOffer] = useState<OfferCardType | null>(null);
 
   const handleCardHover = (offerId: string | null) => {
     const currentOffer = filteredOffers.find((offer) => offer.id === offerId) || null;
@@ -32,27 +31,21 @@ function MainPage({ offerCards }: MainProps): JSX.Element {
       </Helmet>
       <h1 className="visually-hidden">Cities</h1>
       <div className="tabs">
-        <section className="locations container">
-          <ul className="locations__list tabs__list">
-            {CITIES.map((cityName) => (
-              <li key={cityName} className="locations__item">
-                <Link
-                  to={AppRoute.Main}
-                  className={`locations__item-link tabs__item${activeCity === cityName ? ' tabs__item--active' : ''}`}
-                  onClick={() => setActiveCity(cityName)}
-                >
-                  <span>{cityName}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
+        <CitiesList cities={CITIES} />
       </div>
       <div className="cities">
         <div className="cities__places-container container">
           <section className="cities__places places">
             <h2 className="visually-hidden">Places</h2>
-            <b className="places__found">{filteredOffers.length} places to stay in {activeCity}</b>
+            {filteredOffers.length > 0 ? (
+              <b className="places__found">
+                {filteredOffers.length} places to stay in {activeCity}
+              </b>
+            ) : (
+              <b className="places__found">
+                No places to stay available in {activeCity}
+              </b>
+            )}
             <form className="places__sorting" action="#" method="get">
               <span className="places__sorting-caption">Sort by</span>
               <span className="places__sorting-type" tabIndex={0}>
